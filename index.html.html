@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>🔥 Usta Pideci | QR Menü</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #111;
+            color: white;
+        }
+
+        /* ÜST KISIM */
+
+        .hero {
+            height: 330px;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, .55),
+                    rgba(0, 0, 0, .85)),
+                url("https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=1400&q=85");
+
+            background-size: cover;
+            background-position: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 46px;
+            color: #ffb300;
+            margin-bottom: 10px;
+            text-shadow: 0 3px 20px black;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: #ddd;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff6b00;
+            padding: 7px 15px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* RESTORAN BİLGİ */
+
+        .restaurant-info {
+            max-width: 1100px;
+            margin: -35px auto 25px;
+
+            background: #1d1d1d;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            position: relative;
+
+            box-shadow: 0 10px 35px rgba(0, 0, 0, .5);
+
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+
+            gap: 15px;
+        }
+
+        .info-box {
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .info-box span {
+            display: block;
+            color: #ffb300;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .info-box small {
+            color: #aaa;
+        }
+
+        /* ARAMA */
+
+        .search-area {
+            max-width: 1100px;
+            margin: auto;
+            padding: 10px 20px;
+        }
+
+        .search {
+            width: 100%;
+
+            padding: 17px 20px;
+
+            border-radius: 15px;
+
+            border: 1px solid #333;
+
+            background: #1c1c1c;
+
+            color: white;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+        .search:focus {
+            border-color: #ff9800;
+        }
+
+        /* KATEGORİLER */
+
+        .categories {
+            max-width: 1100px;
+            margin: 20px auto;
+
+            padding: 0 20px;
+
+            display: flex;
+            gap: 10px;
+
+            overflow-x: auto;
+        }
+
+        .category {
+            border: none;
+
+            padding: 12px 20px;
+
+            border-radius: 30px;
+
+            background: #242424;
+
+            color: white;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+
+            font-weight: bold;
+        }
+
+        .category:hover,
+        .category.active {
+            background: #ff7b00;
+        }
+
+        /* MENÜ */
+
+        .menu {
+            max-width: 1100px;
+            margin: auto;
+
+            padding: 10px 20px 100px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 25px;
+        }
+
+        /* ÜRÜN */
+
+        .product {
+            background: #1b1b1b;
+
+            border-radius: 22px;
+
+            overflow: hidden;
+
+            border: 1px solid #292929;
+
+            transition: .3s;
+
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .3);
+        }
+
+        .product:hover {
+            transform: translateY(-7px);
+
+            border-color: #ff9800;
+
+            box-shadow:
+                0 15px 40px rgba(255, 120, 0, .15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 210px;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .product h2 {
+            font-size: 21px;
+        }
+
+        .price {
+            color: #ffb300;
+            font-size: 21px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .description {
+            color: #aaa;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            margin: 12px 0 18px;
+        }
+
+        .add-button {
+            width: 100%;
+
+            border: none;
+
+            padding: 13px;
+
+            border-radius: 12px;
+
+            background: #ff7b00;
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .add-button:hover {
+            background: #ff9800;
+        }
+
+        /* SEPET */
+
+        .cart {
+
+            position: fixed;
+
+            bottom: 20px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: min(90%, 500px);
+
+            background: #ff7b00;
+
+            border-radius: 18px;
+
+            padding: 16px 20px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, .6);
+
+            cursor: pointer;
+
+            z-index: 999;
+        }
+
+        .cart strong {
+            font-size: 17px;
+        }
+
+        .cart-price {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+
+            color: #777;
+
+            padding: 30px;
+
+            border-top: 1px solid #222;
+        }
+
+        /* MOBİL */
+
+        @media(max-width:600px) {
+
+            .hero {
+                height: 280px;
+            }
+
+            .hero-content h1 {
+                font-size: 34px;
+            }
+
+            .hero-content p {
+                font-size: 15px;
+            }
+
+            .restaurant-info {
+                margin: -25px 15px 20px;
+                padding: 20px 10px;
+            }
+
+            .info-box {
+                min-width: 100px;
+            }
+
+            .product-image {
+                height: 190px;
+            }
+
+            .menu {
+                grid-template-columns: 1fr;
+            }
+
+        }
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- ========================= -->
+    <!-- HERO -->
+    <!-- ========================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                🔥 TAŞ FIRIN LEZZETİ
+            </div>
+
+            <h1>USTA PİDECİ</h1>
+
+            <p>
+                Geleneksel Türk Pidesinin Modern Yorumu
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- RESTORAN BİLGİ -->
+    <!-- ========================= -->
+
+    <div class="restaurant-info">
+
+        <div class="info-box">
+
+            <span>🔥</span>
+
+            <small>
+                Taş Fırın
+            </small>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <span>⭐</span>
+
+            <small>
+                4.9 / 5
+            </small>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <span>🕐</span>
+
+            <small>
+                11:00 - 00:00
+            </small>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <span>📞</span>
+
+            <small>
+                0555 555 55 55
+            </small>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- ARAMA -->
+    <!-- ========================= -->
+
+    <div class="search-area">
+
+        <input type="text" class="search" id="search" placeholder="🔎 Menüde ara... Örn: kıymalı">
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- KATEGORİLER -->
+    <!-- ========================= -->
+
+    <div class="categories">
+
+        <button class="category active" onclick="filterMenu('all', this)">
+            🍽️ Tümü
+        </button>
+
+        <button class="category" onclick="filterMenu('pide', this)">
+            🥙 Pideler
+        </button>
+
+        <button class="category" onclick="filterMenu('lahmacun', this)">
+            🫓 Lahmacun
+        </button>
+
+        <button class="category" onclick="filterMenu('icecek', this)">
+            🥤 İçecekler
+        </button>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- MENÜ -->
+    <!-- ========================= -->
+
+    <div class="menu" id="menu">
+
+
+
+        <!-- Kıymalı -->
+
+        <div class="product" data-category="pide" data-name="kıymalı pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Kıymalı Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Kıymalı Pide
+                    </h2>
+
+                    <div class="price">
+                        ₺280
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Dana kıyma, domates, soğan,
+                    yeşil biber ve özel baharatlar.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Kıymalı Pide',280)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Kuşbaşılı -->
+
+        <div class="product" data-category="pide" data-name="kuşbaşılı pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Kuşbaşılı Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Kuşbaşılı Pide
+                    </h2>
+
+                    <div class="price">
+                        ₺350
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Kuşbaşı dana eti, domates,
+                    biber ve özel pide harcı.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Kuşbaşılı Pide',350)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Kaşarlı -->
+
+        <div class="product" data-category="pide" data-name="kaşarlı pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Kaşarlı Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Kaşarlı Pide
+                    </h2>
+
+                    <div class="price">
+                        ₺300
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Bol kaşar peyniri ve
+                    tereyağı ile hazırlanan nefis pide.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Kaşarlı Pide',300)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Kıymalı Kaşarlı -->
+
+        <div class="product" data-category="pide" data-name="kıymalı kaşarlı pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Kıymalı Kaşarlı Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Kıymalı Kaşarlı
+                    </h2>
+
+                    <div class="price">
+                        ₺330
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Dana kıyma ve erimiş kaşarın
+                    taş fırında mükemmel birleşimi.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Kıymalı Kaşarlı Pide',330)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Kuşbaşı Kaşarlı -->
+
+        <div class="product" data-category="pide" data-name="kuşbaşı kaşarlı pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Kuşbaşı Kaşarlı Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Kuşbaşı Kaşarlı
+                    </h2>
+
+                    <div class="price">
+                        ₺390
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Özel marine kuşbaşı et,
+                    domates, biber ve bol kaşar.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Kuşbaşı Kaşarlı Pide',390)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Sucuklu -->
+
+        <div class="product" data-category="pide" data-name="sucuklu kaşarlı pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Sucuklu Kaşarlı Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Sucuklu Kaşarlı
+                    </h2>
+
+                    <div class="price">
+                        ₺360
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Dana sucuk, bol kaşar
+                    ve tereyağı.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Sucuklu Kaşarlı Pide',360)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Karışık -->
+
+        <div class="product" data-category="pide" data-name="karışık pide">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Karışık Pide">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        🔥 Usta Karışık
+                    </h2>
+
+                    <div class="price">
+                        ₺420
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Kıyma, kuşbaşı et, sucuk,
+                    kaşar ve özel Usta Pideci harcı.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Usta Karışık Pide',420)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Lahmacun -->
+
+        <div class="product" data-category="lahmacun" data-name="lahmacun">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Lahmacun">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        Lahmacun
+                    </h2>
+
+                    <div class="price">
+                        ₺180
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    İnce hamur, özel kıymalı harç,
+                    domates, biber ve baharatlar.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Lahmacun',180)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Ayran -->
+
+        <div class="product" data-category="icecek" data-name="ayran">
+
+            <img class="product-image"
+                src="https://images.unsplash.com/photo-1777315387772-bde80ddce03b?auto=format&fit=crop&w=900&q=85"
+                alt="Ayran">
+
+            <div class="product-content">
+
+                <div class="product-top">
+
+                    <h2>
+                        🥛 Ayran
+                    </h2>
+
+                    <div class="price">
+                        ₺50
+                    </div>
+
+                </div>
+
+                <p class="description">
+                    Soğuk, köpüklü geleneksel ayran.
+                </p>
+
+                <button class="add-button" onclick="addToCart('Ayran',50)">
+                    🛒 Sepete Ekle
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SEPET -->
+    <!-- ========================= -->
+
+    <div class="cart" onclick="showCart()">
+
+        <strong>
+            🛒 Sepet
+            <span id="cartCount">0</span> ürün
+        </strong>
+
+        <div class="cart-price">
+            ₺<span id="cartTotal">0</span>
+        </div>
+
+    </div>
+
+
+
+    <footer>
+
+        🔥 USTA PİDECİ
+
+        <br><br>
+
+        Geleneksel lezzet • Taş fırın • Taptaze
+
+    </footer>
+
+
+
+    <script>
+
+        let cartCount = 0;
+        let cartTotal = 0;
+
+
+        /* ========================= */
+        /* SEPETE ÜRÜN EKLE */
+        /* ========================= */
+
+        function addToCart(name, price) {
+
+            cartCount++;
+
+            cartTotal += price;
+
+            document.getElementById("cartCount").innerText =
+                cartCount;
+
+            document.getElementById("cartTotal").innerText =
+                cartTotal;
+
+            alert(
+                "🔥 " + name +
+                " sepete eklendi!"
+            );
+        }
+
+
+        /* ========================= */
+        /* SEPET */
+        /* ========================= */
+
+        function showCart() {
+
+            if (cartCount === 0) {
+
+                alert("Sepetiniz şu anda boş.");
+
+                return;
+            }
+
+            alert(
+                "🛒 SEPETİNİZ\n\n" +
+
+                "Ürün sayısı: " +
+                cartCount +
+
+                "\nToplam: ₺" +
+                cartTotal
+            );
+        }
+
+
+        /* ========================= */
+        /* KATEGORİ FİLTRESİ */
+        /* ========================= */
+
+        function filterMenu(category, button) {
+
+            document
+                .querySelectorAll(".category")
+                .forEach(btn => {
+
+                    btn.classList.remove("active");
+
+                });
+
+            button.classList.add("active");
+
+
+            document
+                .querySelectorAll(".product")
+                .forEach(product => {
+
+                    if (
+                        category === "all" ||
+                        product.dataset.category === category
+                    ) {
+
+                        product.style.display = "block";
+
+                    } else {
+
+                        product.style.display = "none";
+
+                    }
+
+                });
+
+        }
+
+
+        /* ========================= */
+        /* ARAMA */
+        /* ========================= */
+
+        document
+            .getElementById("search")
+            .addEventListener("input", function () {
+
+                const searchText =
+                    this.value.toLowerCase();
+
+                document
+                    .querySelectorAll(".product")
+                    .forEach(product => {
+
+                        const name =
+                            product.dataset.name;
+
+                        if (name.includes(searchText)) {
+
+                            product.style.display =
+                                "block";
+
+                        } else {
+
+                            product.style.display =
+                                "none";
+
+                        }
+
+                    });
+
+            });
+
+    </script>
+
+
+</body>
+
+</html>
